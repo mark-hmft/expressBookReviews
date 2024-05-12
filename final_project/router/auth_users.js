@@ -59,9 +59,24 @@ regd_users.post("/login", (req,res) => {
 regd_users.put("/auth/review/:isbn", (req, res) => {
   let isbn = req.params.isbn;
   let review = req.query.review;
-  let user = req.session.user;
-  books[isbn].reviews = `${user.username}:  ${review}`;
+  let user = req.session.user.username;
+  let reviews = books[isbn].reviews;
+  reviews[`${user}`] = `${user}:  ${review}`;
   return res.status(200).send(`The review for the book with ISBN ${isbn} has been added/updated`);
+});
+
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  let isbn = req.params.isbn;
+  let user = req.session.user.username;
+  let reviews = books[isbn].reviews;
+  if(reviews[`${user}`]){
+    delete  reviews[`${user}`];
+    return res.status(200).send(`Reviews for the book with ISBN ${isbn} by the user test deleted.`);
+  } else {
+    return res.json({message: "Cannot delete post, post does not exist."})
+  }
+  
 });
 
 module.exports.authenticated = regd_users;
