@@ -1,3 +1,5 @@
+//import axios from 'axios';
+const axios = require('axios');
 const express = require('express');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
@@ -64,5 +66,57 @@ public_users.get('/review/:isbn',function (req, res) {
   const isbn = req.params.isbn;
   res.send(books[isbn].reviews);
 });
+
+// Get Books with Axios async-await
+const getBooks = async () => {
+  try {
+      const response = await axios.get('http://localhost:5000/');
+      console.log(response.data); // Handle the response data
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+};
+getBooks();
+
+// Get Book by ISBN with Axios async-await
+const getBookBy_isbn = async (isbn) => {
+  try {
+      const response = await axios.get(`http://localhost:5000/isbn/${isbn}`);
+      console.log(response.data); // Handle the response data
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+};
+getBookBy_isbn(1);
+
+// Get Book by Author with Axios async-await
+const getBookBy_author = async (author) => {
+  try {
+      const response = await axios.get(`http://localhost:5000/author/${author}`);
+      console.log(response.data); // Handle the response data
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+};
+getBookBy_author('Jane Austen');
+
+// Get Book by Title with Axios async-await
+const getBookBy_title = async (title) => {
+  try {
+      const response = await axios.get(`http://localhost:5000/title/${title}`);
+      const titleBooks = [];
+    
+      // Iterate through the books and check if the title matches
+      for (const isbn in books) {
+          if (books[isbn].title === title) {
+            titleBooks.push(books[isbn]);
+        }
+    }
+      console.log(JSON.stringify(titleBooks,null,4)); // Handle the response data
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
+};
+getBookBy_title('The Epic Of Gilgamesh');
 
 module.exports.general = public_users;
