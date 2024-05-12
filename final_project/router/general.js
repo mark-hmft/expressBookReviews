@@ -104,15 +104,7 @@ getBookBy_author('Jane Austen');
 const getBookBy_title = async (title) => {
   try {
       const response = await axios.get(`http://localhost:5000/title/${title}`);
-      const titleBooks = [];
-    
-      // Iterate through the books and check if the title matches
-      for (const isbn in books) {
-          if (books[isbn].title === title) {
-            titleBooks.push(books[isbn]);
-        }
-    }
-      console.log(JSON.stringify(titleBooks,null,4)); // Handle the response data
+      console.log(response.data); // Handle the response data
   } catch (error) {
       console.error('Error fetching data:', error);
   }
